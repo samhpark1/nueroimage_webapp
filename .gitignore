@@ -21,3 +21,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore the entire venv directory
+venv/
+
+# Ignore any generated Python bytecode files
+*.pyc
+
+# Ignore any caches or temporary files created by the virtual environment
+__pycache__/
+*.pyc
+*.pyo

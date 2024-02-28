@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const NiftiView = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
-    //const [params, setParams] = useState(null);
     const papayaViewerRef = useRef(null);
 
     useEffect(() => {
+        const viewerRef = papayaViewerRef.current;
         const fetchData = async () => {
             try {
                 const params = {
@@ -13,15 +12,12 @@ const NiftiView = (props) => {
                     kioskMode: true,
                     worldSpace: true,
                     showControlBar: true,
-
+                    allowScroll: false,
                 };
 
-                //setParams(loadedParams);
-                window.papaya.Container.addViewer(papayaViewerRef.current.id, params);
+                window.papaya.Container.addViewer(viewerRef.id, params);
             } catch (error) {
                 console.error('Error loading data:', error);
-            } finally {
-                setIsLoading(false);
             }
         };
 
@@ -29,34 +25,14 @@ const NiftiView = (props) => {
         fetchData();
 
         return () => {
-            if (papayaViewerRef.currrent){
-                papayaViewerRef.current.innerHTML = '';
+            if (viewerRef){
+                viewerRef.innerHTML = '';
             }
         }
 
     }, [props.file]);
 
-
-    // useEffect(() => {
-    //     if (!isLoading && params) {
-    //         window.papaya.Container.startPapaya();
-    //         window.papaya.Container.resetViewer(0, params);
-    //     }
-
-    // }, [isLoading, params]);
-
-
-    // useEffect(() => {
-    //     if (!isLoading && papayaViewerRef.current) {
-    //         window.scrollTo({top: papayaViewerRef.current.offsetTop, behavior: 'smooth'})
-    //     }
-    // }, [isLoading])
-
-    // return (
-    //     <div style={{ "width": "800px", "marginTop": "10px" }} >
-    //         <div id="papaya_viewer" className="papaya"></div>
-    //     </div>
-    // );
+    
 
     return(
         <div id='papaya_viewer' ref={papayaViewerRef} />

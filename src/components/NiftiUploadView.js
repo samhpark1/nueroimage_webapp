@@ -1,10 +1,8 @@
 import {useState, useRef} from 'react';
 import NiftiView from './NiftiView';
-import APITest from './APITest';
 
-const NiftiUploadView = () => {
+const NiftiUploadView = (props) => {
 
-    const [selectedFiles, setSelectedFiles] = useState([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const fileInputRef = useRef(null);
 
@@ -21,12 +19,12 @@ const NiftiUploadView = () => {
     const fileChangeHandler = (e) => {
         const files = e.target.files;
 
-        if(areFilesDuplicates(files, selectedFiles)){
+        if(areFilesDuplicates(files, props.selectedFiles)){
             alert("Duplicate Files are Not Allowed");
             return;
         }
 
-        setSelectedFiles([...selectedFiles, ...files]);
+        props.setSelectedFiles([...props.selectedFiles, ...files]);
     }
 
     const dragOverHandler = (e) => {
@@ -38,12 +36,12 @@ const NiftiUploadView = () => {
 
         const droppedFiles = e.dataTransfer.files;
 
-        if(areFilesDuplicates(droppedFiles, selectedFiles)){
+        if(areFilesDuplicates(droppedFiles, props.selectedFiles)){
             alert("Duplicate Files are Not Allowed");
             return;
         }
 
-        setSelectedFiles([...selectedFiles, ...droppedFiles]);
+        props.setSelectedFiles([...props.selectedFiles, ...droppedFiles]);
     }
 
     const dragBoxClickHandler = () => {
@@ -51,14 +49,15 @@ const NiftiUploadView = () => {
     }
 
     const removeFiles = () => {
-        setSelectedFiles([]);
+        props.setSelectedFiles([]);
         setIsSubmitted(false);
+        fileInputRef.current.value = ''
     }
 
     const submitHandler = (e) => {
         e.preventDefault();
 
-        if(selectedFiles.length === 0){
+        if(props.selectedFiles.length === 0){
             alert("Please select atleast one file before submitting");
             return;
         }
@@ -92,7 +91,7 @@ const NiftiUploadView = () => {
                     onClick={dragBoxClickHandler}
                     >
                         <h3>Drop Files Here or Click to Add Files</h3>
-                        {selectedFiles.map((file, index) => (
+                        {props.selectedFiles.map((file, index) => (
                             <h4 key={index}>{file.name}</h4>    
                         ))}
                 </section>
@@ -106,13 +105,8 @@ const NiftiUploadView = () => {
             </form>
 
             <section>
-                {isSubmitted && <NiftiView file={selectedFiles[0]}/>}
+                {isSubmitted && <NiftiView file={props.selectedFiles[0]}/>}
             </section>
-            
-            <section>
-                {isSubmitted && <APITest file={selectedFiles[0]}/>}
-            </section>
-
         </div>
     )
 }

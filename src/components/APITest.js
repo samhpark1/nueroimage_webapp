@@ -9,27 +9,31 @@ const APITest = (props) => {
 
     useEffect(() => {
         const uploadFile = async () => {
-            const formData = new FormData();
-            formData.append('file', props.file);
-    
-            try{
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: formData,
-                });
-    
-                if (response.ok){
-                    const data = await response.json();
-                    setResponse(data);
+                const formData = new FormData();
+                formData.append('file', props.file);
+
+                const modelChoice = JSON.stringify(["AD", "Age"]);
+
+                formData.append('modelChoice', modelChoice);
+        
+                try{
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        body: formData,
+                    });
+        
+                    if (response.ok){
+                        const data = await response.json();
+                        setResponse(data);
+                    }
+                    else{
+                        setError('Failed to submit form');
+                    }
+        
                 }
-                else{
-                    setError('Failed to submit form');
+                catch (error){
+                    setError(error.message);
                 }
-    
-            }
-            catch (error){
-                setError(error.message);
-            }
         }
 
         uploadFile();

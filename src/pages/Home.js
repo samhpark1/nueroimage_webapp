@@ -1,9 +1,13 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import NiftiUploadView from '../components/NiftiUploadView';
 
 const Home = () => {
 
     const [selectedModels, setSelectedModels] = useState([]);
+    const [modelLoading, setModelLoading] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    const apiURL = 'http://127.0.0.1:5000/api/uploadFile'
 
     const handleModelChoice = (e) => {
         const selectedModel = e.target.value;
@@ -15,19 +19,55 @@ const Home = () => {
         }
     }
 
-    const submitModelHandler = () => {
-        if (selectedModels.length > 0){
-            console.log(selectedModels);
+
+    const uploadFile = async (file) => {
+        const formdata = new FormData();
+        formdata.append('file', file);
+
+        const modelChoice = JSON.stringify(selectedModels);
+        formdata.append('modelChoice', modelChoice);
+
+        try{
+            const response = await fetch(apiURL, {
+                method: 'POST',
+                body: formdata,
+            });
+
+            if (response.ok){
+                const data = await response.json();
+                console.log(JSON.stringify(data));
+            }
+            else{
+                console.error('Failed to submit form');
+            }
         }
-        else{
+        catch (error) {
+            console.error('Error: ', error);
+        }
+    }
+
+    const submitModelHandler = () => {
+        if (modelLoading){
+            alert("Currently running model on file(s)")
+        }
+        else if (selectedModels.length <= 0){
             alert("Please select at least one prediction model.")
+        }
+        else if (selectedFiles.length <= 0){
+            alert("Please select at least one file.")
+        }
+        else{ 
+            for (let i = 0; i < selectedFiles.length; i++){
+                setModelLoading(true);
+                uploadFile(selectedFiles[i]);
+            }
         }
     }
 
     return (
         <div className="flex flex-col items-center">
             <section>
-                <NiftiUploadView />
+                <NiftiUploadView selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             </section>
             <h2>Choose Prediction Model(s) to Run</h2>
             <section className="flex flex-auto">

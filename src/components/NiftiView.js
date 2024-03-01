@@ -23,19 +23,27 @@ const NiftiView = (props) => {
 
 
         fetchData();
-
         return () => {
             if (viewerRef){
                 viewerRef.innerHTML = '';
             }
         }
 
+
     }, [props.file]);
 
     
 
     return(
-        <div id='papaya_viewer' ref={papayaViewerRef} />
+        <div className='flex flex-col items-center border  border-gray-200 px-10 rounded-lg shadow-lg mx-5'>
+            <section className='flex justify-between'>
+                <button onClick={props.prev} className="bg-gray-600 text-gray-200 hover:bg-gray-800 focus:bg-gray-600 active:bg-gray-800 px-2 py-1 rounded-lg m-4">prev</button>
+                <h2 className='text-xl font-bold underline m-5'>{props.file.name}</h2>
+                <button onClick={props.next} className="bg-gray-600 text-gray-200 hover:bg-gray-800 focus:bg-gray-600 active:bg-gray-800 px-2 py-1 rounded-lg m-4">next</button>
+            </section>
+            <div id='papaya_viewer' ref={papayaViewerRef} />
+        </div>
+        
     ) 
 };
 

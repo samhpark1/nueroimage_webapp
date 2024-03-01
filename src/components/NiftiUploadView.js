@@ -5,8 +5,25 @@ const NiftiUploadView = (props) => {
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const fileInputRef = useRef(null);
+    const [windowChoice, setWindowChoice] = useState(0);
 
+    const nextWindow = () => {
+        if (windowChoice === props.selectedFiles.length-1){
+            setWindowChoice(0);
+        }
+        else{
+            setWindowChoice(windowChoice + 1);
+        }
+    }
 
+    const prevWindow = () => {
+        if (windowChoice === 0){
+            setWindowChoice(props.selectedFiles.length-1);
+        }
+        else{
+            setWindowChoice(windowChoice - 1);
+        }
+    }
 
     const areFilesDuplicates = (newFiles, existingFiles) => {
         const newFilesArray = Array.from(newFiles);
@@ -66,47 +83,61 @@ const NiftiUploadView = (props) => {
     }
 
     return (
-        <div className="flex flex-col justifty-center items-center">
-            <h2>File Upload Form</h2>
-            <form 
-            className="flex flex-col justify-center items-center"
-            onSubmit={submitHandler} 
-            onDragOver={dragOverHandler} 
-            onDrop={dropHandler}>
-                <input 
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept=".nii, .gz"
-                    onChange={fileChangeHandler}
-                    ref={fileInputRef}
-                    className="hidden"
-                    multiple
-                />
+        <div className="flex border-b py-5">
+            <div className="flex flex-col items-start mr-5">
+                <h2 className='text-3xl font-bold text-gray-600 text-shadow'>File Upload Form</h2>
+                <h3 className='text-xl text-gray-600 my-3'>Files of type .ni and .gz will be accepted</h3>
+                <form 
+                className=""
+                onSubmit={submitHandler} 
+                onDragOver={dragOverHandler} 
+                onDrop={dropHandler}>
+                    <input 
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept=".nii, .gz"
+                        onChange={fileChangeHandler}
+                        ref={fileInputRef}
+                        className="hidden"
+                        multiple
+                    />
 
-                <section 
-                    className="flex flex-col items-center border-2 border-dashed border-blue-400 p-4 rounded-md m-5"
-                    onDragOver={dragOverHandler}
-                    onDrop={dropHandler}
-                    onClick={dragBoxClickHandler}
-                    >
-                        <h3>Drop Files Here or Click to Add Files</h3>
-                        {props.selectedFiles.map((file, index) => (
-                            <h4 key={index}>{file.name}</h4>    
-                        ))}
-                </section>
-                
-                <button type="submit" className="bg-blue-400 text-white px-4 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
-                    Upload File(s)
-                </button>
-                <h1 onClick={removeFiles} className="bg-blue-400 text-white px-4 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
-                    Clear
-                </h1>
-            </form>
+                    <section>
+                        <div
+                            className="flex flex-col justify-center items-center w-96 h-64 border-2 border-dashed border-gray-700 p-4 rounded-md my-5"
+                            onDragOver={dragOverHandler}
+                            onDrop={dropHandler}
+                            onClick={dragBoxClickHandler}
+                            >
+                                <h3 className='text-xl font-bold text-gray-600'>Drop Files Here</h3>
+                                <h4 className='text-md text-gray-600'>or Click to Add Files</h4>
 
-            <section>
-                {isSubmitted && <NiftiView file={props.selectedFiles[0]}/>}
-            </section>
+                                {props.selectedFiles.map((file, index) => (
+                                    <h4 className='text-md text-gray-600 font-bold'key={index}>{file.name}</h4>
+                                ))}
+                        </div> 
+                        
+                    </section>
+                    
+                    <section className='flex justify-between my-4'>
+                        <button type="submit" className="bg-gray-600 text-gray-200 hover:bg-gray-800 focus:bg-gray-600 active:bg-gray-800 px-4 py-2 rounded-full m-0.5">
+                            Upload File(s)
+                        </button>
+                        <h1 onClick={removeFiles} className="bg-gray-600 text-gray-200 hover:bg-gray-800 focus:bg-gray-600 active:bg-gray-800 px-4 py-2 rounded-full m-0.5">
+                            Clear
+                        </h1>
+                    </section>
+                </form>
+            </div>
+            <div className='p-5 w-full'>
+                {isSubmitted && <NiftiView next={nextWindow} prev={prevWindow} file={props.selectedFiles[windowChoice]} /> }
+                {!isSubmitted && 
+                    <div className='flex justify-center items-center w-full h-96 border border-gray-200 text-red-500 underline px-10 rounded-lg shadow-lg'>
+                        Upload File(s) to View
+                    </div>
+                }
+            </div>
         </div>
     )
 }

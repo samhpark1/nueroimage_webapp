@@ -1,9 +1,8 @@
 const Navbar = () => {
     return (
-        <div className="flex items-center justify-center bg-gray-100
-                        p-5">
+        <div className="flex items-center justify-left p-8 shadow-lg">
             <nav className="">
-                <h2 className="text-4xl font-bold text-blue-400">Website Name</h2>
+                <h2 className="text-4xl font-bold text-gray-600 text-shadow">NeuroImager</h2>
             </nav>
         </div>
     )

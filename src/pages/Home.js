@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import NiftiUploadView from '../components/NiftiUploadView';
 
 const Home = () => {
@@ -65,59 +65,62 @@ const Home = () => {
     }
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col p-10">
             <section>
                 <NiftiUploadView selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             </section>
-            <h2>Choose Prediction Model(s) to Run</h2>
-            <section className="flex flex-auto">
-                <label>
-                    <h4>AD</h4>
-                    <input 
-                        type="checkbox"
-                        name="model"
-                        value="AD"
-                        onChange={handleModelChoice}
-                    />
-                </label>
+            <section className='my-5'>
+                <h2 className='text-3xl font-bold text-gray-600 text-shadow'>Run Models</h2>
+                <h2 className='text-xl text-gray-600 my-3'>Choose Prediction Model(s) to Run</h2>
+                <section className="flex justify-between w-3/4">
+                    <label>
+                        <h4 className='text-md font-bold text-gray-600 text-shadow'>AD</h4>
+                        <input 
+                            type="checkbox"
+                            name="model"
+                            value="AD"
+                            onChange={handleModelChoice}
+                        />
+                    </label>
 
-                <label>
-                    <h4>Age</h4>
-                    <input 
-                        type="checkbox"
-                        name="model"
-                        value="age"
-                        onChange={handleModelChoice}
-                    />
-                </label>
+                    <label>
+                        <h4 className='text-md font-bold text-gray-600 text-shadow'>Age</h4>
+                        <input 
+                            type="checkbox"
+                            name="model"
+                            value="age"
+                            onChange={handleModelChoice}
+                        />
+                    </label>
 
-                <label>
-                    <h4>AB/LBD</h4>
-                    <input 
-                        type="checkbox"
-                        name="model"
-                        value="AD/LBD"
-                        onChange={handleModelChoice}
-                    />
-                </label>
+                    <label>
+                        <h4 className='text-md font-bold text-gray-600 text-shadow'>AB/LBD</h4>
+                        <input 
+                            type="checkbox"
+                            name="model"
+                            value="AD/LBD"
+                            onChange={handleModelChoice}
+                        />
+                    </label>
 
-                <label>
-                    <h4>AB/CAA</h4>
-                    <input 
-                        type="checkbox"
-                        name="model"
-                        value="AD/CAA"
-                        onChange={handleModelChoice}
-                    />
-                </label>
-            </section>
-            <section>
-                <button 
-                    onClick={submitModelHandler}
-                    className="bg-blue-400 text-white px-4 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
-                    >
-                        Submit
-                </button>
+                    <label>
+                        <h4 className='text-md font-bold text-gray-600 text-shadow'>AB/CAA</h4>
+                        <input 
+                            type="checkbox"
+                            name="model"
+                            value="AD/CAA"
+                            onChange={handleModelChoice}
+                        />
+                    </label>
+                </section>
+                <section>
+                    <button 
+                        onClick={submitModelHandler}
+                        className="bg-gray-600 text-gray-200 hover:bg-gray-800 focus:bg-gray-600 active:bg-gray-800 px-4 py-2 rounded-full my-5"
+                        >
+                            Run
+                    </button>
+                </section>
             </section>
         </div>
     )

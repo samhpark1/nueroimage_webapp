@@ -41,7 +41,12 @@ const NiftiUploadView = (props) => {
             return;
         }
 
-        props.setSelectedFiles([...props.selectedFiles, ...files]);
+        if (props.selectedFiles.length !== 5){
+            props.setSelectedFiles([...props.selectedFiles, ...files]);
+        }
+        else{
+            alert("Maximum number of files that can be uploaded is 5");
+        }
     }
 
     const dragOverHandler = (e) => {
@@ -86,7 +91,7 @@ const NiftiUploadView = (props) => {
         <div className="flex border-b py-5">
             <div className="flex flex-col items-start mr-5">
                 <h2 className='text-3xl font-bold text-gray-600 text-shadow'>File Upload Form</h2>
-                <h3 className='text-xl text-gray-600 my-3'>Files of type .ni and .gz will be accepted</h3>
+                <h3 className='text-xl text-gray-600 my-3'>Only files of type .nii.gz will be accepted (Limit of 5)</h3>
                 <form 
                 className=""
                 onSubmit={submitHandler} 
@@ -96,10 +101,11 @@ const NiftiUploadView = (props) => {
                         type="file"
                         id="file"
                         name="file"
-                        accept=".nii, .gz"
+                        accept="application/gzip,.nii"
                         onChange={fileChangeHandler}
                         ref={fileInputRef}
                         className="hidden"
+                        max={5}
                         multiple
                     />
 
@@ -114,7 +120,7 @@ const NiftiUploadView = (props) => {
                                 <h4 className='text-md text-gray-600'>or Click to Add Files</h4>
 
                                 {props.selectedFiles.map((file, index) => (
-                                    <h4 className='text-md text-gray-600 font-bold'key={index}>{file.name}</h4>
+                                    <h4 className={`text-md ${windowChoice === index ? 'text-blue-500 underline' : 'text-gray-600'} font-bold`} key={index}>{file.name}</h4>
                                 ))}
                         </div> 
                         
@@ -131,7 +137,7 @@ const NiftiUploadView = (props) => {
                 </form>
             </div>
             <div className='p-5 w-full'>
-                {isSubmitted && <NiftiView next={nextWindow} prev={prevWindow} file={props.selectedFiles[windowChoice]} /> }
+                {isSubmitted && <NiftiView id={props.selectedFiles[windowChoice].name} next={nextWindow} prev={prevWindow} file={props.selectedFiles[windowChoice]} /> }
                 {!isSubmitted && 
                     <div className='flex justify-center items-center w-full h-96 border border-gray-200 text-red-500 underline px-10 rounded-lg shadow-lg'>
                         Upload File(s) to View

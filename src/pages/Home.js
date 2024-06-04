@@ -1,11 +1,15 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import NiftiUploadView from '../components/NiftiUploadView';
+import BrainExtractViewer from '../components/BrainExtractViewer';
 
 const Home = () => {
 
     const [selectedModels, setSelectedModels] = useState([]);
     const [modelLoading, setModelLoading] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
+
+    useEffect(() => {
+    }, [selectedFiles])
 
     const apiURL = 'http://127.0.0.1:5000/api/uploadFile'
 
@@ -69,6 +73,9 @@ const Home = () => {
             <section>
                 <NiftiUploadView selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             </section>
+            <section>
+                <BrainExtractViewer selectedFiles={selectedFiles}/>
+            </section>
             <section className='my-5'>
                 <h2 className='text-3xl font-bold text-gray-600 text-shadow'>Run Models</h2>
                 <h2 className='text-xl text-gray-600 my-3'>Choose Prediction Model(s) to Run</h2>
@@ -122,6 +129,7 @@ const Home = () => {
                     </button>
                 </section>
             </section>
+            
         </div>
     )
 }
